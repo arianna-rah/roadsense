@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { ScrollBlur} from './components/scrollblur';
+import { UploadFile } from './components/uploadfile';
 
 function App() {
   return (
@@ -9,16 +10,9 @@ function App() {
       alt="Road going through mountains"
       title1="Road"
       title2="Sense"
-      subtitle="AI-powered road condition analysis for safer journeys"></ScrollBlur>
+      subtitle="AI-powered road condition analysis for safer journeys" />
 
-    <p>This is some text</p><br></br>
-    <p>More text</p><br></br>
-    <p>This is some text</p><br></br>
-    <p>More text</p><br></br>
-    <p>This is some text</p><br></br>
-    <p>More text</p><br></br>
-    <p>This is some text</p><br></br>
-    <p>More text</p><br></br>
+    <UploadFile />
   </div>
   )
 }
