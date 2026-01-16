@@ -42,15 +42,15 @@ export const ScrollBlur = ({src, alt, title1, title2, subtitle}: overlayInfo) =>
         />
       </div>
       
-      <div className="absolute inset-0 bg-black opacity-50" style={{opacity: overlayOpacity}}></div>
-      <div className="absolute inset-0 bg-gradient-to-b from-black/20 to indigo-500 transition-opacity duration-300"></div>
+      
+      <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/40 to-black transition-opacity duration-300"></div>
 
       <div className="relative z-10 flex h-full flex-col items-center justify-center p-4 transition-all duration-300"
       style={{opacity: opacity, transform: `translateY(${scrollY * 0.3}px)`}}>
         <CustomSVG className="w-24 h-24 mb-6"></CustomSVG>
         <h1 className="text-white text-7xl font-bold text-center">{title1}<span className="text-yellow-300 text-7xl font-bold text-center ml-2">{title2}</span></h1>
 
-        <h3 className="text-white text-xl text-center mt-10">{subtitle}</h3>
+        <h3 className="text-white text-2xl text-center mt-10">{subtitle}</h3>
       </div>
     </div>
   )
