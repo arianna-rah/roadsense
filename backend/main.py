@@ -1,4 +1,4 @@
-from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi import FastAPI, File, UploadFile, HTTPException, Depends, Request
 from PIL import Image
 from torchvision import transforms
 import torch
@@ -8,6 +8,7 @@ import io
 import base64
 from fastapi.middleware.cors import CORSMiddleware
 from ultralytics import YOLO
+import os
 
 app = FastAPI()
 
@@ -56,6 +57,7 @@ async def predict(file: UploadFile = File(...)):
     try: 
         contents = await file.read()
         img = Image.open(io.BytesIO(contents)).convert('RGB')
+
         w, h = img.size
         crop_box = (w/3, h/2, 2*w/3, h)
         cropped_img = img.crop(crop_box)
@@ -70,6 +72,7 @@ async def predict(file: UploadFile = File(...)):
                                 "standing_water": float(probs[0][2].item()), 
                                 "snow": float(probs[0][3].item()), 
                                 "ice": float(probs[0][4].item()) }
+
         return {
             "predicted": class_to_idx[predicted.item()],
             "confidence": float(confidence.item()),
@@ -85,11 +88,12 @@ async def yolo_predict(file: UploadFile = File(...)):
     try:
         contents = await file.read()
         img = Image.open(io.BytesIO(contents)) 
+
         results = yolo_model.predict(
         source=img,
         save=False,          
         conf=0.05,
-        device = 0           
+        device = device           
         )
         num_anomalies = len(results[0].boxes)
         result_img = Image.fromarray(results[0].plot())
@@ -99,10 +103,11 @@ async def yolo_predict(file: UploadFile = File(...)):
         img_base64 = base64.b64encode(buffered.getvalue()).decode("utf-8")
 
         result_url = f"data:image/jpeg;base64,{img_base64}"
+
         return {
             "num_anomalies": num_anomalies,
             "result_img": result_url
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-    
+  
